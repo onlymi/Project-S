@@ -60,12 +60,31 @@ int MainMap[51][51] =
    4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5
 };
 
-void MainMap_Output(); //맵 출력
+int SmallTitle[3][10] =
+{
+	2, 1, 1, 1, 1, 1, 1, 1, 1, 3,
+	6, 0, 0, 0, 0, 0, 0, 0, 0, 6,
+	4, 1, 1, 1, 1, 1, 1, 1, 1, 5,
+};
+
+int BigTitle[5][15] =
+{
+	2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3,
+	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
+	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
+	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
+	4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5
+};
 
 void gotoxy(int x, int y); //좌표 이동
 void CursorView(char show); //커서 안보임
 void text_color(int color_num); //글자 색
 void CountDown(int time); //time만큼 CountDown
+
+/*맵 출력*/
+void MainMap_Output();
+void SmallTitle_Output(int y);
+void BigTitle_Output(int y);
 
 /*BMP 출력*/
 void MainPicture(int x, int y);
@@ -76,11 +95,6 @@ void CuteMonster1(int x, int y);
 void Move_Player();
 void Move_CuteMonster1();
 
-/*Title*/
-void StartGame_Title(int y);
-void HowToPlay_Title(int y);
-void Quit_Title(int y);
-
 /*MAP*/
 void MainManu();
 void HowToPlay();
@@ -90,43 +104,6 @@ int main()
 {
 	system("mode con cols=101 lines=55");
 	MainManu();
-}
-
-void MainMap_Output()
-{
-	for (i = 0; i < 51; i++)
-	{
-		for (j = 0; j < 51; j++)
-		{
-			if (MainMap[i][j] == 0)
-				printf("  ");
-
-			else if (MainMap[i][j] == 1)
-				printf("──");
-
-			else if (MainMap[i][j] == 2)
-				printf("┌");
-
-			else if (MainMap[i][j] == 3)
-				printf("┐");
-
-			else if (MainMap[i][j] == 4)
-				printf("└");
-
-			else if (MainMap[i][j] == 5)
-				printf("┘");
-
-			else if (MainMap[i][j] == 6)
-				printf("│");
-
-			else if (MainMap[i][j] == 7)
-				printf("┬");
-
-			else if (MainMap[i][j] == 8)
-				printf("┴");
-		}
-		printf("\n");
-	}
 }
 
 void gotoxy(int x, int y)
@@ -170,6 +147,108 @@ void CountDown(int time)
 	}
 
 	text_color(7);
+}
+
+/*맵 출력*/
+void MainMap_Output()
+{
+	for (i = 0; i < 51; i++)
+	{
+		for (j = 0; j < 51; j++)
+		{
+			if (MainMap[i][j] == 0)
+				printf("  ");
+
+			else if (MainMap[i][j] == 1)
+				printf("──");
+
+			else if (MainMap[i][j] == 2)
+				printf("┌");
+
+			else if (MainMap[i][j] == 3)
+				printf("┐");
+
+			else if (MainMap[i][j] == 4)
+				printf("└");
+
+			else if (MainMap[i][j] == 5)
+				printf("┘");
+
+			else if (MainMap[i][j] == 6)
+				printf("│");
+
+			else if (MainMap[i][j] == 7)
+				printf("┬");
+
+			else if (MainMap[i][j] == 8)
+				printf("┴");
+		}
+		printf("\n");
+	}
+}
+
+void SmallTitle_Output(int y)
+{
+	for (i = 0; i < 3; i++)
+	{
+		gotoxy(81, y + i - 1);
+
+		for (j = 0; j < 10; j++)
+		{
+			if (SmallTitle[i][j] == 0)
+				printf("  ");
+
+			else if (SmallTitle[i][j] == 1)
+				printf("──");
+
+			else if (SmallTitle[i][j] == 2)
+				printf("┌");
+
+			else if (SmallTitle[i][j] == 3)
+				printf("┐");
+
+			else if (SmallTitle[i][j] == 4)
+				printf("└");
+
+			else if (SmallTitle[i][j] == 5)
+				printf("┘");
+
+			else if (SmallTitle[i][j] == 6)
+				printf("│");
+		}
+	}
+}
+
+void BigTitle_Output(int y)
+{
+	for (i = 0; i < 5; i++)
+	{
+		gotoxy(71, y + i - 2);
+
+		for (j = 0; j < 15; j++)
+		{
+			if (BigTitle[i][j] == 0)
+				printf("  ");
+
+			else if (BigTitle[i][j] == 1)
+				printf("──");
+
+			else if (BigTitle[i][j] == 2)
+				printf("┌");
+
+			else if (BigTitle[i][j] == 3)
+				printf("┐");
+
+			else if (BigTitle[i][j] == 4)
+				printf("└");
+
+			else if (BigTitle[i][j] == 5)
+				printf("┘");
+
+			else if (BigTitle[i][j] == 6)
+				printf("│");
+		}
+	}
 }
 
 /*BMP 출력*/
@@ -334,7 +413,7 @@ void Move_Player()
 				printf("			");
 				gotoxy(n_x, n_y + 6);
 				printf("			");
-				
+
 				if (n_y < 43)
 				{
 					gotoxy(n_x, n_y + 7);
@@ -490,22 +569,6 @@ void Move_CuteMonster1()
 	}
 }
 
-/*Title*/
-void StartGame_Title(int y)
-{
-
-}
-
-void HowToPlay_Title(int y)
-{
-
-}
-
-void Quit_Title(int y)
-{
-
-}
-
 /*MAP*/
 
 void MainManu()
@@ -515,24 +578,26 @@ void MainManu()
 
 	int manu = 0;
 
-	int x = 70, y = 34;
-	int n_x = 70, n_y = 34;
+	int x = 81, y = 32;
+	int n_x = 81, n_y = 32;
 
 	MainMap_Output();
 
-	gotoxy(x, y);
-	text_color(2);
-	printf("▶");
-
-	gotoxy(x + 4, 34);
+	text_color(7);
+	BigTitle_Output(32);
+	gotoxy(x, 32);
 	text_color(11);
 	printf("Start Game");
 
-	gotoxy(x + 4, 40);
+	text_color(7);
+	SmallTitle_Output(38);
+	gotoxy(x + 4, 38);
 	text_color(8);
 	printf("How To Play");
 
-	gotoxy(x + 4, 46);
+	text_color(7);
+	SmallTitle_Output(44);
+	gotoxy(x + 8, 44);
 	text_color(8);
 	printf("Quit");
 
@@ -542,83 +607,116 @@ void MainManu()
 	{
 		if (x != n_x || y != n_y)
 		{
-			if (n_y < 34)
+			if (n_y < 32)
 			{
-				n_y = 34;
+				n_y = 32;
 			}
 
-			if (n_y > 46)
+			if (n_y > 44)
 			{
-				n_y = 46;
+				n_y = 44;
 			}
 
-			gotoxy(x, y);
-			printf(" ");
-			gotoxy(n_x, n_y);
-			text_color(2);
-			printf("▶");
-
-			while (n_y == 34)
+			while (n_y == 32)
 			{
 				CursorView(0);
 
-				gotoxy(x + 4, 40);
+				for (i = 0; i < 17; i++)
+				{
+					gotoxy(71, 30 + i);
+					printf("                            ");
+				}
+
+				text_color(7);
+				BigTitle_Output(n_y);
+
+				text_color(7);
+				SmallTitle_Output(38);
+				gotoxy(x + 4, 38);
 				text_color(8);
 				printf("How To Play");
 
-				gotoxy(x + 4, 46);
+				text_color(7);
+				SmallTitle_Output(44);
+				gotoxy(x + 8, 44);
 				text_color(8);
 				printf("Quit");
 
 				srand(time(NULL));
 
 				Sleep(rand() % 150 + 50);
-				gotoxy(n_x + 4, n_y);
+				gotoxy(n_x, n_y);
 				text_color(11);
 				printf("Start Game");
 				Sleep(rand() % 150 + 50);
-				gotoxy(n_x + 4, n_y);
-				printf("                    ");
+				gotoxy(n_x, n_y);
+				printf("                  ");
 
 				if (_kbhit())
 					break;
 			}
 
-			while (n_y == 40)
+			while (n_y == 38)
 			{
 				CursorView(0);
 
-				gotoxy(x + 4, 34);
+				for (i = 0; i < 17; i++)
+				{
+					gotoxy(71, 30 + i);
+					printf("                            ");
+				}
+
+				text_color(7);
+				BigTitle_Output(n_y);
+
+				text_color(7);
+				SmallTitle_Output(32);
+				gotoxy(x + 5, 32);
 				text_color(8);
 				printf("Start Game");
 
-				gotoxy(x + 4, 46);
+				text_color(7);
+				SmallTitle_Output(44);
+				gotoxy(x + 8, 44);
 				text_color(8);
 				printf("Quit");
 
 				srand(time(NULL));
 
 				Sleep(rand() % 150 + 50);
-				gotoxy(n_x + 4, n_y);
+				gotoxy(n_x, n_y);
 				text_color(6);
 				printf("How To Play");
 				Sleep(rand() % 150 + 50);
-				gotoxy(n_x + 4, n_y);
-				printf("                    ");
+				gotoxy(n_x, n_y);
+				printf("                  ");
 
 				if (_kbhit())
 					break;
 			}
 
-			while (n_y == 46)
+			while (n_y == 44)
 			{
 				CursorView(0);
 
-				gotoxy(x + 4, 34);
+				for (i = 0; i < 17; i++)
+				{
+					gotoxy(71, 30 + i);
+					printf("                            ");
+				}
+
+				text_color(7);
+				BigTitle_Output(n_y);
+
+				text_color(7);
+				SmallTitle_Output(32);
+				gotoxy(x + 5, 32);
 				text_color(8);
 				printf("Start Game");
 
-				gotoxy(x + 4, 40);
+				text_color(7);
+				SmallTitle_Output(38);
+				gotoxy(x + 4, 38);
 				text_color(8);
 				printf("How To Play");
 
@@ -629,8 +727,8 @@ void MainManu()
 				text_color(5);
 				printf("Quit");
 				Sleep(rand() % 150 + 50);
-				gotoxy(n_x + 4, n_y);
-				printf("                    ");
+				gotoxy(n_x + 5, n_y);
+				printf("    ");
 
 				if (_kbhit())
 					break;
@@ -666,33 +764,30 @@ void MainManu()
 			{
 				if (manu == 13)
 				{
-					if (y == 34)
+					if (y == 32)
 					{
 						text_color(7);
 
 						Battlefield();
 					}
 
-					if (y == 40)
+					if (y == 38)
 					{
 						HowToPlay();
 					}
 
-					if (y == 46)
+					if (y == 44)
 					{
 						text_color(7);
 
-						gotoxy(x, y);
-						printf(" ");
+						gotoxy(n_x, 32);
+						printf("				");
 
-						gotoxy(n_x + 4, 34);
-						printf("                    ");
+						gotoxy(n_x, 38);
+						printf("				");
 
-						gotoxy(n_x + 4, 40);
-						printf("                    ");
-
-						gotoxy(n_x + 4, 46);
-						printf("                    ");
+						gotoxy(n_x, 44);
+						printf("				");
 
 						gotoxy(45, 34);
 						CountDown(3);
