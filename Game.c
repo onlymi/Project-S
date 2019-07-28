@@ -60,14 +60,14 @@ int MainMap[51][51] =
    4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5
 };
 
-void MainMap_Output(); //¸Ê Ãâ·Â
+void MainMap_Output(); //ë§µ ì¶œë ¥
 
-void gotoxy(int x, int y); //ÁÂÇ¥ ÀÌµ¿
-void CursorView(char show); //Ä¿¼­ ¾Èº¸ÀÓ
-void text_color(int color_num); //±ÛÀÚ »ö
-void CountDown(int time); //time¸¸Å­ CountDown
+void gotoxy(int x, int y); //ì¢Œí‘œ ì´ë™
+void CursorView(char show); //ì»¤ì„œ ì•ˆë³´ì„
+void text_color(int color_num); //ê¸€ì ìƒ‰
+void CountDown(int time); //timeë§Œí¼ CountDown
 
-/*BMP Ãâ·Â*/
+/*BMP ì¶œë ¥*/
 void MainPicture(int x, int y);
 void Player(int x, int y);
 void CuteMonster1(int x, int y);
@@ -89,7 +89,7 @@ void Battlefield();
 int main()
 {
 	system("mode con cols=101 lines=55");
-	printf("¾È³çÇÏ¼¼¿ä");
+	MainManu();
 }
 
 void MainMap_Output()
@@ -102,28 +102,28 @@ void MainMap_Output()
 				printf("  ");
 
 			else if (MainMap[i][j] == 1)
-				printf("¦¡¦¡");
+				printf("â”€â”€");
 
 			else if (MainMap[i][j] == 2)
-				printf("¦£");
+				printf("â”Œ");
 
 			else if (MainMap[i][j] == 3)
-				printf("¦¤");
+				printf("â”");
 
 			else if (MainMap[i][j] == 4)
-				printf("¦¦");
+				printf("â””");
 
 			else if (MainMap[i][j] == 5)
-				printf("¦¥");
+				printf("â”˜");
 
 			else if (MainMap[i][j] == 6)
-				printf("¦¢");
+				printf("â”‚");
 
 			else if (MainMap[i][j] == 7)
-				printf("¦¨");
+				printf("â”¬");
 
 			else if (MainMap[i][j] == 8)
-				printf("¦ª");
+				printf("â”´");
 		}
 		printf("\n");
 	}
@@ -172,7 +172,7 @@ void CountDown(int time)
 	text_color(7);
 }
 
-/*BMP Ãâ·Â*/
+/*BMP ì¶œë ¥*/
 
 void MainPicture(int x, int y)
 {
@@ -522,7 +522,7 @@ void MainManu()
 
 	gotoxy(x, y);
 	text_color(2);
-	printf("¢º");
+	printf("â–¶");
 
 	gotoxy(x + 4, 34);
 	text_color(11);
@@ -556,7 +556,7 @@ void MainManu()
 			printf(" ");
 			gotoxy(n_x, n_y);
 			text_color(2);
-			printf("¢º");
+			printf("â–¶");
 
 			while (n_y == 34)
 			{
@@ -698,7 +698,7 @@ void MainManu()
 						CountDown(3);
 
 						gotoxy(45, 34);
-						printf("°ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.\n");
+						printf("ê²Œì„ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.\n");
 
 						gotoxy(1, 51);
 						break;
@@ -718,13 +718,13 @@ void HowToPlay()
 	MainMap_Output();
 
 	gotoxy(x, y);
-	printf("< °ÔÀÓ ¹æ¹ı >\n");
+	printf("< ê²Œì„ ë°©ë²• >\n");
 	y += 2;
 	gotoxy(x, y);
-	printf("ÀÌ °ÔÀÓÀº ¾ÆÁ÷ ¿Ï¼ºÀÌ µÇÁö ¾Ê¾Ò½À´Ï´Ù.\n");
+	printf("ì´ ê²Œì„ì€ ì•„ì§ ì™„ì„±ì´ ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\n");
 	y += 2;
 	gotoxy(x, y);
-	printf("µ¹¾Æ°¡·Á¸é Backspace¸¦ ´©¸£¼¼¿ä.\n");
+	printf("ëŒì•„ê°€ë ¤ë©´ Backspaceë¥¼ ëˆ„ë¥´ì„¸ìš”.\n");
 
 	gotoxy(88, 49);
 	printf("Made by : S");
@@ -740,7 +740,7 @@ void HowToPlay()
 				y += 2;
 				gotoxy(x, y);
 
-				printf("3ÃÊ µÚ¿¡ µ¹¾Æ°©´Ï´Ù.\n");
+				printf("3ì´ˆ ë’¤ì— ëŒì•„ê°‘ë‹ˆë‹¤.\n");
 				y += 1;
 				gotoxy(x, y);
 				CountDown(3);
