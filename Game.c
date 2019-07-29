@@ -98,6 +98,7 @@ void Move_CuteMonster1();
 /*MAP*/
 void MainManu();
 void HowToPlay();
+void Loding_Bar();
 void Battlefield();
 
 int main()
@@ -336,16 +337,8 @@ void CuteMonster1(int x, int y)
 		0,
 		LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
-	while (1)
-	{
-		hOldBitmap = (HBITMAP)SelectObject(hMemDC, hImage);
-		BitBlt(hdc, x, y, 500, 500, hMemDC, 0, 0, SRCCOPY);
-
-		if (_kbhit())
-		{
-			break;
-		}
-	}
+	hOldBitmap = (HBITMAP)SelectObject(hMemDC, hImage);
+	BitBlt(hdc, x, y, 500, 500, hMemDC, 0, 0, SRCCOPY);
 
 	SelectObject(hMemDC, hOldBitmap);
 	DeleteObject(hImage);
@@ -383,10 +376,10 @@ void Move_Player()
 				n_y = 1;
 			}
 
-			if (x > 90 * 8)
+			if (x > 44 * 2 * 8)
 			{
-				x = 90 * 8;
-				n_x = 90;
+				x = 44 * 2 * 8;
+				n_x = 44 * 2;
 			}
 
 			if (y > 43 * 16)
@@ -436,9 +429,9 @@ void Move_Player()
 				gotoxy(n_x - 2, n_y + 4);
 				printf("			");
 				gotoxy(n_x - 2, n_y + 5);
-				printf("	 		");
+				printf(" 			");
 				gotoxy(n_x - 2, n_y + 6);
-				printf("	 		");
+				printf("			");
 
 				if (n_y < 43)
 				{
@@ -491,81 +484,36 @@ void Move_CuteMonster1()
 
 	srand(time(NULL));
 
-	int x = 16, y = 16;
-	int n_x = 2, n_y = 1;
+	int x = 100 * 8, y = 100 * 16;
+	int n_x, n_y;
 
 	MainMap_Output();
 	CuteMonster1(x, y);
 
 	while (1)
 	{
-		if (x != n_x || y != n_y)
-		{
-			x = (rand() % 45 + 1) * 2;
-			y = (rand() % 22 + 1) * 2;
+		Sleep(3000);
+		n_x = x / 8, n_y = y / 16;
 
-			if (x < 16)
-			{
-				x = 16;
-				n_x = 2;
-			}
+		
+		gotoxy(n_x, n_y + 0);
+		printf("				");
+		gotoxy(n_x, n_y + 1);
+		printf("				");
+		gotoxy(n_x, n_y + 2);
+		printf("				");
+		gotoxy(n_x, n_y + 3);
+		printf("				");
+		gotoxy(n_x, n_y + 4);
+		printf("				");
+		gotoxy(n_x, n_y + 5);
+		printf("				");
 
-			if (y < 16)
-			{
-				y = 16;
-				n_y = 1;
-			}
+		x = (rand() % 45 + 1) * 2 * 8;
+		y = (rand() % 22 + 1) * 2 * 16;
 
-			if (x > 90 * 8)
-			{
-				x = 90 * 8;
-				n_x = 90;
-			}
-
-			if (y > 44 * 16)
-			{
-				y = 44 * 16;
-				n_y = 44;
-			}
-
-			if (n_x == 2)
-			{
-				gotoxy(n_x, n_y - 1);
-				printf("			");
-				gotoxy(n_x, n_y + 0);
-				printf("			");
-				gotoxy(n_x, n_y + 1);
-				printf("			");
-				gotoxy(n_x, n_y + 2);
-				printf("			");
-				gotoxy(n_x, n_y + 3);
-				printf("			");
-				gotoxy(n_x, n_y + 4);
-				printf("			");
-				gotoxy(n_x, n_y + 5);
-				printf("			");
-			}
-
-			else
-			{
-				gotoxy(n_x - 2, n_y - 1);
-				printf("			");
-				gotoxy(n_x - 2, n_y + 0);
-				printf("			");
-				gotoxy(n_x - 2, n_y + 1);
-				printf("			");
-				gotoxy(n_x - 2, n_y + 2);
-				printf("			");
-				gotoxy(n_x - 2, n_y + 3);
-				printf("			");
-				gotoxy(n_x - 2, n_y + 4);
-				printf("			");
-				gotoxy(n_x - 2, n_y + 5);
-				printf("			");
-			}
-
-			CuteMonster1(x, y);
-		}
+		Sleep(1000);
+		CuteMonster1(x, y);
 	}
 }
 
@@ -780,18 +728,9 @@ void MainManu()
 					{
 						text_color(7);
 
-						gotoxy(n_x, 32);
-						printf("				");
-
-						gotoxy(n_x, 38);
-						printf("				");
-
-						gotoxy(n_x, 44);
-						printf("				");
-
 						gotoxy(45, 34);
 						CountDown(3);
-
+						
 						gotoxy(45, 34);
 						printf("게임을 종료합니다.\n");
 
@@ -844,6 +783,11 @@ void HowToPlay()
 			}
 		}
 	}
+}
+
+void Loding_Bar()
+{
+	MainMap_Output();
 }
 
 void Battlefield()
