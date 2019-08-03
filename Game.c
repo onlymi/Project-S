@@ -785,7 +785,7 @@ void HowToPlay()
 	}
 }
 
-void Loding_Bar()
+void Loading_Bar()
 {
 	MainMap_Output();
 }
