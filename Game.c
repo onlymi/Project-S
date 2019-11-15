@@ -3,10 +3,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <conio.h>
+#include <dmusicc.h>
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "msimg32.lib")
 
-/*ÀÌµ¿*/
+/*ì´ë™*/
 #define UP 72
 #define DOWN 80
 #define LEFT 75
@@ -19,19 +21,12 @@ INPUT_RECORD rec;
 DWORD dwNOER;
 HANDLE CIN = 0;
 
-/*System ¼³Á¤*/
-void gotoxy(int x, int y); // ÁÂÇ¥ ÀÌµ¿
-void CursorView(char show); // Ä¿¼­ ¾Èº¸ÀÓ
-void Text_Color(int color_num); // ±ÛÀÚ »ö
-void Use_System(); // system ÇÔ¼ö¿Í ¸¶¿ì½º Å¬¸¯ ÇÔ¼ö¸¦ °°ÀÌ »ç¿ëÇÏ¸é	Ãæµ¹ÀÌ ÀÏ¾î³ª¹Ç·Î ÀÌ ÇÔ¼ö¸¦ »ç¿ëÇØ ¸¶¿ì½º¸¦ ÀçÈ°¼ºÈ­ ½ÃÄÑÁØ´Ù.
-void CountDown(int time); // time¸¸Å­ CountDown
+/*System ì„¤ì •*/
+void gotoxy(int x, int y); // ì¢Œí‘œ ì´ë™
+void CursorView(char show); // ì»¤ì„œ ì•ˆë³´ì„
+void Text_Color(int color_num); // ê¸€ì ìƒ‰
+void CountDown(int time); // timeë§Œí¼ CountDown
 void Wait(int n, int x, int y);
-
-/*¸¶¿ì½º Å¬¸¯*/
-void Click(int *xx, int *yy, int *lr);
-void Use_Click();
-void Mouse_Pointer();
-void Menu_Mouse_Pointer(int x, int y);
 
 /*Sound*/
 void Play_Sound();
@@ -92,15 +87,15 @@ int MainMap[51][51] =
 	4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5
 };
 
-int ConversationMap[7][31] =
+int ConversationMap[7][45] =
 {
-	2, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 3,
-	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
-	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
-	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
-	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
-	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
-	4, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 5,
+	2, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 3,
+	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
+	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
+	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
+	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
+	6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6,
+	4, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 5
 };
 
 int SmallTitle[3][10] =
@@ -174,7 +169,7 @@ int Stage1_Map[51][51] =
 	4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5
 };
 
-/*MAP Ãâ·Â*/
+/*MAP ì¶œë ¥*/
 void MainMap_Output();
 void Conversation_Output();
 void SmallTitle_Output(int y);
@@ -187,13 +182,17 @@ void Stage1();
 /*Game*/
 void MainMenu();
 void MainMenu_Setting(int n, int x, int y);
+void Game_Prologue();
+// -> Mouse
+void Menu_Mouse(int x, int y);
+//
 void HowToPlay();
 void New_Game();
 
 /*Save File*/
 void SaveFile();
 
-/*BMP Ãâ·Â*/
+/*BMP ì¶œë ¥*/
 void MainPicture(int x, int y);
 void MainScreenTitle(int x, int y);
 // -> Character
@@ -222,12 +221,12 @@ struct Main_Position
 int main()
 {
 	system("mode con cols=101 lines=60");
-	//Play_Sound(); // BGM Àç»ı
-	//MainMenu(); // ¸ŞÀÎ ¸Ş´º È­¸é
-	StageMap_Output(Stage1_Map);
+	Play_Sound(); // BGM ì¬ìƒ
+	MainMenu(); // ë©”ì¸ ë©”ë‰´ í™”ë©´
+	//Use_Click();
 }
 
-/*System ¼³Á¤*/	
+/*System ì„¤ì •*/	
 
 void gotoxy(int x, int y)
 {
@@ -253,32 +252,22 @@ void Text_Color(int color_num)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_num);
 
 	/*
-		0 = °ËÁ¤»ö			1 = ÆÄ¶õ»ö
+		0 = ê²€ì •ìƒ‰			1 = íŒŒë€ìƒ‰
 
-		2 = ÃÊ·Ï»ö			3 = ¿Á»ö	
+		2 = ì´ˆë¡ìƒ‰			3 = ì˜¥ìƒ‰	
 
-		4 = »¡°£»ö			5 = ÀÚÁÖ»ö
+		4 = ë¹¨ê°„ìƒ‰			5 = ìì£¼ìƒ‰
 
-		6 = ³ë¶õ»ö			7 = Èò»ö
+		6 = ë…¸ë€ìƒ‰			7 = í°ìƒ‰
 
-		8 = È¸»ö			9 = ¿¬ÇÑ ÆÄ¶õ»ö
+		8 = íšŒìƒ‰			9 = ì—°í•œ íŒŒë€ìƒ‰
 
-		10 = ¿¬ÇÑ ÃÊ·Ï»ö	11 = ¿¬ÇÑ ¿Á»ö
+		10 = ì—°í•œ ì´ˆë¡ìƒ‰	11 = ì—°í•œ ì˜¥ìƒ‰
 
-		12 = ¿¬ÇÑ »¡°£»ö	13 = ¿¬ÇÑ ÀÚÁÖ»ö
+		12 = ì—°í•œ ë¹¨ê°„ìƒ‰	13 = ì—°í•œ ìì£¼ìƒ‰
 
-		14 = ¿¬ÇÑ ³ë¶õ»ö	15 = ÁøÇÑ Èò»ö
+		14 = ì—°í•œ ë…¸ë€ìƒ‰	15 = ì§„í•œ í°ìƒ‰
 	*/
-}
-
-void Use_System()
-{
-	DWORD CIN;
-	DWORD mode;
-	CIN = GetStdHandle(STD_INPUT_HANDLE); //¸¶¿ì½º ÀçÈ°¼ºÈ­
-	GetConsoleMode(CIN, &mode);
-	SetConsoleMode(CIN, mode | ENABLE_MOUSE_INPUT);
-
 }
 
 void CountDown(int time)
@@ -319,198 +308,11 @@ void Wait(int n, int x, int y)
 	}
 }
 
-/*Mouse*/
-
-void Click(int *xx, int *yy, int *lr) {
-	while (1)
-	{
-		ReadConsoleInput(GetStdHandle(STD_INPUT_HANDLE), &rec, 1, &dwNOER); // ÄÜ¼ÖÃ¢ ÀÔ·ÂÀ» ¹Ş¾ÆµéÀÓ.
-		if (rec.EventType == MOUSE_EVENT) // ¸¶¿ì½º ÀÌº¥Æ®ÀÏ °æ¿ì
-		{
-
-			if (rec.Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED) // ÁÂÃø ¹öÆ°ÀÌ Å¬¸¯µÇ¾úÀ» °æ¿ì
-			{ 
-				int mouse_x = rec.Event.MouseEvent.dwMousePosition.X; // X°ª ¹Ş¾Æ¿È
-				int mouse_y = rec.Event.MouseEvent.dwMousePosition.Y; // Y°ª ¹Ş¾Æ¿È
-
-				*xx = mouse_x; // x°ªÀ» ³Ñ±è
-				*yy = mouse_y; // y°ªÀ» ³Ñ±è
-				*lr = 1; // ¸¶¿ì½º Å¬¸¯»óÅÂ¸¦ ³Ñ±è
-
-				break;
-			}
-			else if (rec.Event.MouseEvent.dwButtonState & RIGHTMOST_BUTTON_PRESSED) // ¿ìÃø ¹öÆ°ÀÌ Å¬¸¯µÇ¾úÀ» °æ¿ì
-			{
-				int mouse_x = rec.Event.MouseEvent.dwMousePosition.X; // X°ª ¹Ş¾Æ¿È
-				int mouse_y = rec.Event.MouseEvent.dwMousePosition.Y; // Y°ª ¹Ş¾Æ¿È
-
-				*xx = mouse_x; // x°ªÀ» ³Ñ±è
-				*yy = mouse_y; // y°ªÀ» ³Ñ±è
-				*lr = 2; // ¸¶¿ì½º Å¬¸¯»óÅÂ¸¦ ³Ñ±è
-
-				break;
-			}
-		}
-	}
-}
-
-void Use_Click()
-{
-	SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT);
-	//¸¶¿ì½º ÀÔ·Â¸ğµå·Î ¹Ù²Ş
-
-	int xx, yy, lr;
-	while (1)
-	{
-		Click(&xx, &yy, &lr);
-		printf("%2d %2d %2d\n", xx, yy, lr);
-	}
-}
-
-void Mouse_Pointer()
-{
-	CursorView(0);
-
-	POINT a;
-	HWND hWnd;
-	int width = 0;
-	RECT window_size;
-
-	a.x = 0;
-	a.y = 0;
-
-	while (1)
-	{
-		GetCursorPos(&a);
-		hWnd = WindowFromPoint(a);
-		ScreenToClient(hWnd, &a);
-		GetWindowRect(hWnd, &window_size);
-		width = (window_size.right - window_size.left);
-
-		if ((0 < a.x) && (a.x < (int)(width / 2)))
-		{
-			gotoxy(1, 51);
-			printf("X point = %d, Y point = %d\n\r", a.x, a.y);
-		}
-
-		else if (((int)(width / 2) < a.x) && (a.x < (int)width))
-		{
-			gotoxy(1, 51);
-			printf("Y point = %d, X point = %d\n\r", a.y, a.x);
-		}
-
-		if (_kbhit())
-		{
-			break;
-		}
-	}
-}
-
-/*MainMenu Mouse*/
-
-void Menu_Mouse_Pointer(int x, int y)
-{
-	CursorView(0);
-
-	POINT a;
-	HWND hWnd;
-	int width = 0;
-	RECT window_size;
-
-	a.x = 0;
-	a.y = 0;
-
-	int cnt1 = 0;
-	int cnt2 = 0;
-	int part = 0;
-
-	while (1)
-	{
-		GetCursorPos(&a);
-		hWnd = WindowFromPoint(a);
-		ScreenToClient(hWnd, &a);
-		GetWindowRect(hWnd, &window_size);
-		width = (window_size.right - window_size.left);
-
-		if (a.x >= 655 && a.x <= 790 && a.y >= 500 && a.y <= 535)
-		{
-			if (cnt1 == 0)
-			{
-				MainMenu_Setting(1, x, y);
-
-				cnt1 = 1;
-				part = 1;
-			}
-
-			cnt2 = 0;
-		}
-
-		else if (a.x >= 655 && a.x <= 790 && a.y >= 600 && a.y <= 630)
-		{
-			if (cnt1 == 0)
-			{
-				MainMenu_Setting(2, x, y + 6);
-
-				cnt1 = 1;
-			}
-
-			cnt2 = 0;
-		}
-
-		else if (a.x >= 655 && a.x <= 790 && a.y >= 695 && a.y <= 725)
-		{
-			if (cnt1 == 0)
-			{
-				MainMenu_Setting(3, x, y + 12);
-
-				cnt1 = 1;
-			}
-
-			cnt2 = 0;
-		}
-
-		else
-		{
-			if (cnt2 == 0)
-			{
-				MainMenu_Setting(0, x, y);
-
-				cnt2 = 1;
-			}
-
-			cnt1 = 0;
-		}
-
-		/*SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT); //¸¶¿ì½º ÀÔ·Â¸ğµå·Î ¹Ù²Ş
-		
-		int xx, yy, lr;
-
-		while (1)
-		{
-			Click(&xx, &yy, &lr);
-
-			if (lr == 1)
-			{
-				printf("hi");
-
-				break;
-			}
-
-			else
-			{
-				break;
-			}
-		}*/
-	}
-}
-
 /*Sound*/
 
 void Play_Sound()
 {
 	PlaySound(TEXT("BGM1.wav"), NULL, SND_ASYNC | SND_LOOP);
-
-	return 0;
 }
 
 /*Print MAP*/
@@ -527,28 +329,28 @@ void MainMap_Output()
 				printf("  ");
 
 			else if (MainMap[i][j] == 1)
-				printf("¦¡¦¡");
+				printf("â”€â”€");
 
 			else if (MainMap[i][j] == 2)
-				printf("¦£");
+				printf("â”Œ");
 
 			else if (MainMap[i][j] == 3)
-				printf("¦¤");
+				printf("â”");
 
 			else if (MainMap[i][j] == 4)
-				printf("¦¦");
+				printf("â””");
 
 			else if (MainMap[i][j] == 5)
-				printf("¦¥");
+				printf("â”˜");
 
 			else if (MainMap[i][j] == 6)
-				printf("¦¢");
+				printf("â”‚");
 
 			else if (MainMap[i][j] == 7)
-				printf("¦¨");
+				printf("â”¬");
 
 			else if (MainMap[i][j] == 8)
-				printf("¦ª");
+				printf("â”´");
 		}
 		printf("\n");
 	}
@@ -558,30 +360,30 @@ void Conversation_Output()
 {
 	for (i = 0; i < 7; i++)
 	{
-		gotoxy(20, 40 + i);
+		gotoxy(10, 40 + i);
 
-		for (j = 0; j < 31; j++)
+		for (j = 0; j < 45; j++)
 		{
 			if (ConversationMap[i][j] == 0)
 				printf("  ");
 
 			else if (ConversationMap[i][j] == 1)
-				printf("¦¡¦¡");
+				printf("â”€â”€");
 
 			else if (ConversationMap[i][j] == 2)
-				printf("¦£");
+				printf("â”Œ");
 
 			else if (ConversationMap[i][j] == 3)
-				printf("¦¤");
+				printf("â”");
 
 			else if (ConversationMap[i][j] == 4)
-				printf("¦¦");
+				printf("â””");
 
 			else if (ConversationMap[i][j] == 5)
-				printf("¦¥");
+				printf("â”˜");
 
 			else if (ConversationMap[i][j] == 6)
-				printf("¦¢");
+				printf("â”‚");
 		}
 	}
 }
@@ -598,22 +400,22 @@ void SmallTitle_Output(int y)
 				printf("  ");
 
 			else if (SmallTitle[i][j] == 1)
-				printf("¦¡¦¡");
+				printf("â”€â”€");
 
 			else if (SmallTitle[i][j] == 2)
-				printf("¦£");
+				printf("â”Œ");
 
 			else if (SmallTitle[i][j] == 3)
-				printf("¦¤");
+				printf("â”");
 
 			else if (SmallTitle[i][j] == 4)
-				printf("¦¦");
+				printf("â””");
 
 			else if (SmallTitle[i][j] == 5)
-				printf("¦¥");
+				printf("â”˜");
 
 			else if (SmallTitle[i][j] == 6)
-				printf("¦¢");
+				printf("â”‚");
 		}
 	}
 }
@@ -630,22 +432,22 @@ void BigTitle_Output(int y)
 				printf("  ");
 
 			else if (BigTitle[i][j] == 1)
-				printf("¦¡¦¡");
+				printf("â”€â”€");
 
 			else if (BigTitle[i][j] == 2)
-				printf("¦£");
+				printf("â”Œ");
 
 			else if (BigTitle[i][j] == 3)
-				printf("¦¤");
+				printf("â”");
 
 			else if (BigTitle[i][j] == 4)
-				printf("¦¦");
+				printf("â””");
 
 			else if (BigTitle[i][j] == 5)
-				printf("¦¥");
+				printf("â”˜");
 
 			else if (BigTitle[i][j] == 6)
-				printf("¦¢");
+				printf("â”‚");
 		}
 	}
 }
@@ -662,37 +464,37 @@ void StageMap_Output(int Stage[51][51])
 				printf("  ");
 
 			else if (Stage[i][j] == 1)
-				printf("¦¡¦¡");
+				printf("â”€â”€");
 
 			else if (Stage[i][j] == 2)
-				printf("¦£");
+				printf("â”Œ");
 
 			else if (Stage[i][j] == 3)
-				printf("¦¤");
+				printf("â”");
 
 			else if (Stage[i][j] == 4)
-				printf("¦¦");
+				printf("â””");
 
 			else if (Stage[i][j] == 5)
-				printf("¦¥");
+				printf("â”˜");
 
 			else if (Stage[i][j] == 6)
-				printf("¦¢");
+				printf("â”‚");
 
 			else if (Stage[i][j] == 7)
-				printf("¦ª");
+				printf("â”´");
 
 			else if (Stage[i][j] == 8)
-				printf("¦¨");
+				printf("â”¬");
 
 			else if (Stage[i][j] == 9)
-				printf("¦§");
+				printf("â”œ");
 
 			else if (Stage[i][j] == 10)
-				printf("¦©");
+				printf("â”¤");
 
 			else if (Stage[i][j] == 11)
-				printf("¦«");
+				printf("â”¼");
 		}
 		printf("\n");
 	}
@@ -720,17 +522,11 @@ void MainMenu()
 	CursorView(0);
 	srand(time(NULL));
 
-	char menu = 0;
-	int cnt = 0;
-
 	MainMap_Output();
 
 	MainMenu_Setting(0, M_P.x, M_P.y);
 
-	while (1)
-	{
-		Menu_Mouse_Pointer(M_P.x, M_P.y);
-	}
+	Menu_Mouse(M_P.x, M_P.y);
 }
 
 void MainMenu_Setting(int n, int x, int y)
@@ -837,6 +633,112 @@ void MainMenu_Setting(int n, int x, int y)
 	}
 }
 
+void Game_Prologue()
+{
+	int key = 0;
+
+	system("cls");
+	MainMap_Output();
+
+	gotoxy(30, 25);
+	printf("ì£¼ì¸ê³µì˜ ì•„ë¦„ë‹¤ìš´ ì´ì•¼ê¸° ì§€ê¸ˆ ì‹œì‘í•©ë‹ˆë‹¤");
+
+	while (1)
+	{
+		if (_kbhit())
+		{
+			key = _getch();
+
+			switch (key)
+			{
+			case 32:
+				MainMap_Output();
+				Conversation_Output();
+			}
+		}
+	}
+}
+
+// -> Mouse
+
+void Menu_Mouse(int x, int y)
+{
+	CursorView(0);
+
+	POINT a;
+	HWND hWnd;
+	int width = 0;
+	RECT window_size;
+
+	a.x = 0;
+	a.y = 0;
+
+	int cnt1 = 0;
+	int cnt2 = 0;
+
+	while (1)
+	{
+		GetCursorPos(&a);
+		hWnd = WindowFromPoint(a);
+		ScreenToClient(hWnd, &a);
+		GetWindowRect(hWnd, &window_size);
+		width = (window_size.right - window_size.left);
+
+		if (a.x >= 655 && a.x <= 790 && a.y >= 500 && a.y <= 535)
+		{
+			if (cnt1 == 0)
+			{
+				MainMenu_Setting(1, x, y);
+
+				cnt1 = 1;
+
+				Sleep(1000);
+				Game_Prologue();
+			}
+
+			cnt2 = 0;
+		}
+
+		else if (a.x >= 655 && a.x <= 790 && a.y >= 600 && a.y <= 630)
+		{
+			if (cnt1 == 0)
+			{
+				MainMenu_Setting(2, x, y + 6);
+
+				cnt1 = 1;
+
+				Sleep(1000);
+			}
+
+			cnt2 = 0;
+		}
+
+		else if (a.x >= 655 && a.x <= 790 && a.y >= 695 && a.y <= 725)
+		{
+			if (cnt1 == 0)
+			{
+				MainMenu_Setting(3, x, y + 12);
+
+				cnt1 = 1;
+			}
+
+			cnt2 = 0;
+		}
+
+		else
+		{
+			if (cnt2 == 0)
+			{
+				MainMenu_Setting(0, x, y);
+
+				cnt2 = 1;
+			}
+
+			cnt1 = 0;
+		}
+	}
+}
+
 void HowToPlay()
 {
 	system("cls");
@@ -846,13 +748,13 @@ void HowToPlay()
 	int key = 0;
 
 	gotoxy(x, y);
-	printf("< °ÔÀÓ ¹æ¹ı >\n");
+	printf("< ê²Œì„ ë°©ë²• >\n");
 	y += 2;
 	gotoxy(x, y);
-	printf("ÀÌ °ÔÀÓÀº ¾ÆÁ÷ ¿Ï¼ºÀÌ µÇÁö ¾Ê¾Ò½À´Ï´Ù.\n");
+	printf("ì´ ê²Œì„ì€ ì•„ì§ ì™„ì„±ì´ ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\n");
 	y += 2;
 	gotoxy(x, y);
-	printf("µ¹¾Æ°¡·Á¸é Backspace¸¦ ´©¸£¼¼¿ä.\n");
+	printf("ëŒì•„ê°€ë ¤ë©´ Backspaceë¥¼ ëˆ„ë¥´ì„¸ìš”.\n");
 
 	gotoxy(88, 49);
 	printf("Made by : S");
@@ -868,7 +770,7 @@ void HowToPlay()
 				y += 2;
 				gotoxy(x, y);
 
-				printf("3ÃÊ µÚ¿¡ µ¹¾Æ°©´Ï´Ù.\n");
+				printf("3ì´ˆ ë’¤ì— ëŒì•„ê°‘ë‹ˆë‹¤.\n");
 				y += 1;
 				gotoxy(x, y);
 				CountDown(3);
@@ -893,7 +795,7 @@ void SaveFile()
 
 }
 
-/*BMP Ãâ·Â*/
+/*BMP ì¶œë ¥*/
 
 void MainPicture(int x, int y)
 {
@@ -906,14 +808,10 @@ void MainPicture(int x, int y)
 	HDC hdc = GetDC(hWnd);
 	HDC hMemDC = CreateCompatibleDC(hdc);
 
-	hImage = (HBITMAP)LoadImage(NULL, TEXT("¸ŞÀÎÈ­¸é ±×¸².bmp"),
-		IMAGE_BITMAP,
-		0,
-		0,
-		LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	hImage = (HBITMAP)LoadImage(NULL, TEXT("MainPicture.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 	hOldBitmap = (HBITMAP)SelectObject(hMemDC, hImage);
-	BitBlt(hdc, x, y, 800, 525, hMemDC, 0, 0, SRCCOPY);
+	BitBlt(hdc, x, y, 790, 492, hMemDC, 0, 0, SRCCOPY);
 
 	SelectObject(hMemDC, hOldBitmap);
 	DeleteObject(hImage);
@@ -932,11 +830,7 @@ void MainScreenTitle(int x, int y)
 	HDC hdc = GetDC(hWnd);
 	HDC hMemDC = CreateCompatibleDC(hdc);
 
-	hImage = (HBITMAP)LoadImage(NULL, TEXT("¸ŞÀÎÈ­¸é Á¦¸ñ.bmp"),
-		IMAGE_BITMAP,
-		0,
-		0,
-		LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	hImage = (HBITMAP)LoadImage(NULL, TEXT("MainTitle.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 	hOldBitmap = (HBITMAP)SelectObject(hMemDC, hImage);
 	BitBlt(hdc, x, y, 650, 400, hMemDC, 0, 0, SRCCOPY);
@@ -966,14 +860,8 @@ void MainCharacter_boy(int x, int y)
 		0,
 		LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
-	while (1)
-	{
-		hOldBitmap = (HBITMAP)SelectObject(hMemDC, hImage);
-		BitBlt(hdc, x, y, 110, 183, hMemDC, 0, 0, SRCCOPY);
-
-		if (_kbhit())
-			break;
-	}
+	hOldBitmap = (HBITMAP)SelectObject(hMemDC, hImage);
+	BitBlt(hdc, x, y, 110, 183, hMemDC, 0, 0, SRCCOPY);
 
 	SelectObject(hMemDC, hOldBitmap);
 	DeleteObject(hImage);
@@ -992,20 +880,14 @@ void MainCharacter_girl(int x, int y)
 	HDC hdc = GetDC(hWnd);
 	HDC hMemDC = CreateCompatibleDC(hdc);
 
-	hImage = (HBITMAP)LoadImage(NULL, TEXT("¸ŞÀÎ Ä³¸¯ÅÍ ¿©.bmp"),
+	hImage = (HBITMAP)LoadImage(NULL, TEXT("ë©”ì¸ ìºë¦­í„° ì—¬.bmp"),
 		IMAGE_BITMAP,
 		0,
 		0,
 		LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
-	while (1)
-	{
-		hOldBitmap = (HBITMAP)SelectObject(hMemDC, hImage);
-		BitBlt(hdc, x, y, 136, 200, hMemDC, 0, 0, SRCCOPY);
-
-		if (_kbhit())
-			break;
-	}
+	hOldBitmap = (HBITMAP)SelectObject(hMemDC, hImage);
+	BitBlt(hdc, x, y, 136, 200, hMemDC, 0, 0, SRCCOPY);
 
 	SelectObject(hMemDC, hOldBitmap);
 	DeleteObject(hImage);
